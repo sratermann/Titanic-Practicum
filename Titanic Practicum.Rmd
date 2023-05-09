@@ -1,0 +1,112 @@
+---
+title: "Titanic Practicum"
+author: "Jeremy Kline, Mark Van Coutren, Spencer Ratermann"
+date: "2023-05-08"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r, eval=TRUE, echo=FALSE, results='hide'}
+set.seed(12345)
+train <- read.csv("~/PDAT 626G/train.csv", stringsAsFactors=TRUE)
+test <- read.csv("~/PDAT 626G/test.csv", stringsAsFactors=TRUE)
+
+library(tidyverse)
+library(caret)
+
+df.train <- sample_frac(train, size = .85)
+df.test <- setdiff(train, df.train)
+
+```
+
+## Introduction 
+  The story of the Royal Mail Ship the Titanic started as an engineering masterclass for the early 1900’s, only to end as one of the most catastrophic failures costing hundreds of passengers to lose their lives. Completed on May 31st, 1911 the Titanic was a sight to behold as one of the largest and most luxurious ships scheduled to sail the seven seas. Weighing in at an astounding 46,328 tons the Titanic had final measurements that equaled out to 882.5 feet long and 92.5 feet wide. Not only was the ship the size of some buildings, it was also very luxurious with passengers willing to pay large sums of money to travel on this world class creation. Maiden voyage ticket prices in 1912 ranged from 35 for a third class ticket to 4,350 for a first class ticket, which would equate to 1,071-133,132 in modern currency. In early April of 1912 the Titanic was deemed seaworthy and would embark on its first voyage across the treacherous Atlantic Ocean.
+
+  The discrepancy between ticket prices comes with the facilities and location of the first, second, and third class passengers. First class passengers enjoyed facilities that were located on decks A or most of decks B and C as depicted by the image below.
+  
+*Figure 1 Sketch of the Titanic and its deck levels*
+
+These amenities included the finest cabins and suites, swimming pools, squash courts, Turkish bath, luxury lounges, barber shops, and first class restaurants. These amenities were also made with the highest quality materials available. The second class passengers were located on decks D through F, and had a scaled down amount of amenities and quality of cabin. The second class passengers had a few public decks, a barber shop, swimming pool, smoking room, and that was about it. Lastly the third class passengers resided on the remaining lower deck with no amenities to find. There were some public spaces but besides that they were cabin bound without a lot to show for their ticket.
+
+The Titanic was ready to set sail with the maiden voyage leaving port in Southampton, England on April 10th, 1912 with a destination of New York City. Over the first few days of the voyage the Titanic made stops in England, France, and finally Ireland before venturing across the pond to The United States. In total the ship transported 2,200 people, with approximately 1,300 of these being guests. At this time guests were enjoying luxury dining, entertainment, and had no fears about the passage because of the engineering feat that this ship was. They deemed it unsinkable, with guests, crew, and captains believing this as well. On the evening of April 14th, 1912 the Titanic began to approach waters known to have had icebergs, with the Titanic operators Jack Phillips and Harold Bride even receiving multiple messages about icebergs in the area. At 11:40pm a large iceberg was spotted, but at this point the Titanic was too close to avoid its soon to be catastrophic fate. In an attempt to avoid the iceberg the ship was steered away, but the iceberg struck the starboard side, or right side, of the ship. From that point it was a domino effect leading to the sinking of this formally unsinkable ship. Water breached the unbreachable cabins leading to water filling the bow, or front of the ship, which led to the official sinking of the Titanic, front of the ship first. Lifeboats were released, but with only 20 of them there was not enough to save everyone on board. In the end only 705 passengers survived with the other 1,495 unfortunately perishing in the Atlantic Ocean. 
+
+Using two data sets acquired from kaggle about the information about the passengers of the ship, is there a way to predict if a traveler or crew member would survive based on age, gender, ticket class, cabin location, etc. Given were two data sets, a training data set and a testing data set. The training data set contains 891 observations, with each observation being a passenger. This data set also contains 12 variables that consist of passenger number, Survived, 0 means no, 1 means yes, Pclass, ticket class one, two, or three, Name, Sex, Age, SibSp, siblings on board, Parch, family on board, Ticket number, Fare, Cabin, and Embarked, or what port they left from. The testing data set is similar to the training data set with 11 variables, Survived not being included, and 418 observations. Using this data set and previous known knowledge of the sinking of the Titanic is there a way to predict if a person survived based on the information that is given about the passenger. Can a survivor of the Titanic be predicted based on different characteristics like age, gender, class, cabin, fare, and siblings. 
+
+## Methods
+Initial thoughts on the data were figuring out how to predict if a person on the ship would survive based on different factors. The first item that needs to be completed is the data cleaning, data exploration, as well as the models and packages that will be used in order to complete proper analysis.
+
+### Data Cleaning & Exploration
+Data cleaning and exploration are streamlined by a couple of different packages that are easy to use. There two packages are dplyr and ggplot2. Both of these packages exist within the tidyverse package to then complete these operations. Dplyr was used to complete data cleaning, specifically selecting certain variables that were looked at. there was also a way that all of the strings were then put in as factors, which allows for comparisons between gender, class ,etc. The ggplot2 packages does a phenomenal job helping create data visualizations that play an essential role in the data exploration. Specifically stacked bar charts provide a great view of the distribution of these different factors and if people survived or not.  
+
+### Logistic Regression 
+A technique called a logistic regression was used to predict if someone had survived the wreck or not based on other variables in the data set. Logistic regression works by taking the information that is available and responding with a yes or a no for a specific observation. With trying to predict if someone was a survivor or not a logistic regression works perfectly because there are only two possible outcomes. The report will come back for the other variables that would say if it had a certain number the overall outcome will be that yes or no. With that logistic regression there can also be a step wise regression which eliminates the non-significant variables until all of the ones remaining in the model play a significant role in someones survival.
+
+### Neural Networks
+
+
+## Results 
+### Data Exploration 
+### Logistic Regression 
+```{r, eval=TRUE, echo=FALSE}
+logreg = glm(Survived~Pclass+Sex+Age+SibSp+Parch+Fare+Embarked, data = df.train)
+logreg.step=step(logreg)
+coef(logreg.step)
+summary(logreg.step)
+
+pred=predict(logreg.step, df.test, type="response")
+pred=as.factor(ifelse(pred>.5, 1, 0))
+confusionMatrix(as.factor(df.test$Survived), pred)$overall[1]
+```
+
+### Neural Network
+
+## Discussion 
+### Conclusion 
+### Next Steps
+
+
+## Indecies
+### Sources
+Encyclopædia Britannica, inc. (2023, April 24). Titanic. Encyclopædia Britannica. https://www.britannica.com/topic/Titanic 
+
+Fielding, J. (2022, November 12). How much was a ticket on the Titanic?. Cruise Mummy. https://www.cruisemummy.co.uk/titanic-ticket-prices/ 
+
+Kuhn, Max (2008). “Building Predictive Models in R Using the caret Package.” Journal of Statistical Software, 28(5), 1–26. doi:10.18637/jss.v028.i05, https://www.jstatsoft.org/index.php/jss/article/view/v028i05.
+
+Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” Journal of Open Source Software, 4(43), 1686. doi:10.21105/joss.01686.
+
+Wikimedia Foundation. (2023a, March 23). Second- and third-class facilities on the Titanic. Wikipedia. https://en.wikipedia.org/wiki/Second-_and_third-class_facilities_on_the_Titanic 
+
+Wikimedia Foundation. (2023, May 2). First-class facilities of the Titanic. Wikipedia. https://en.wikipedia.org/wiki/First-class_facilities_of_the_Titanic#:~:text=8%20Bibliography-,Location,of%20B%20and%20C%20Decks. 
+
+### Code 
+#### Importing Data Sets and Packages & Data Cleaning
+```{r, eval=FALSE, echo=TRUE}
+set.seed(12345)
+train <- read.csv("~/PDAT 626G/train.csv", stringsAsFactors=TRUE)
+test <- read.csv("~/PDAT 626G/test.csv", stringsAsFactors=TRUE)
+
+library(tidyverse)
+library(caret)
+
+df.train <- sample_frac(train, size = .85)
+df.test <- setdiff(train, df.train)
+```
+
+#### Data Exploration 
+#### Logistic Regression
+```{r}
+logreg = glm(Survived~Pclass+Sex+Age+SibSp+Parch+Fare+Embarked, data = df.train)
+logreg.step=step(logreg)
+coef(logreg.step)
+summary(logreg.step)
+
+pred=predict(logreg.step, df.test, type="response")
+pred=as.factor(ifelse(pred>.5, 1, 0))
+confusionMatrix(as.factor(df.test$Survived), pred)$overall[1]
+```
+#### Neural Network
+
+
+
